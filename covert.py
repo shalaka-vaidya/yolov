@@ -34,3 +34,4 @@ def extract_info_from_xml(xml_file):
             info_dict['bboxes'].append(bbox)
     
     return info_dict
+print(extract_info_from_xml('Road_Sign_Dataset/annotations/road4.xml'))
