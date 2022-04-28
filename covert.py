@@ -2,6 +2,7 @@
 import xml.etree.ElementTree as ET
 import os 
 from tqdm import tqdm
+from sklearn.model_selection import train_test_split
 
 def extract_info_from_xml(xml_file):
     root = ET.parse(xml_file).getroot()
@@ -88,3 +89,15 @@ for ann in tqdm(annotations):
     info_dict = extract_info_from_xml(ann)
     convert_to_yolov5(info_dict)
 annotations = [os.path.join('Road_Sign_Dataset/annotations/', x) for x in os.listdir('Road_Sign_Dataset/annotations/') if x[-3:] == "txt"]
+
+
+# Read images and annotations
+images = [os.path.join('Road_Sign_Dataset/images', x) for x in os.listdir('Road_Sign_Dataset/images')]
+annotations = [os.path.join('Road_Sign_Dataset/annotations', x) for x in os.listdir('Road_Sign_Dataset/annotations') if x[-3:] == "txt"]
+
+images.sort()
+annotations.sort()
+
+# Split the dataset into train-valid-test splits 
+train_images, val_images, train_annotations, val_annotations = train_test_split(images, annotations, test_size = 0.2, random_state = 1)
+val_images, test_images, val_annotations, test_annotations = train_test_split(val_images, val_annotations, test_size = 0.5, random_state = 1)
